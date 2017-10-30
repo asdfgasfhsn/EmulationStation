@@ -8,7 +8,7 @@ class SystemData
 public:
 	const std::vector<std::string> UIModes = { "Full", "Kiosk" };
 	void launchGame(Window* window, FileData* game);
-}
+};
 
 
 // Used to smoothly transition the camera between multiple views (e.g. from system to system, from gamelist to gamelist).
