@@ -3,9 +3,13 @@
 #include "views/gamelist/IGameListView.h"
 #include "views/SystemView.h"
 
-class SystemData;
+class SystemData
+{
+public:
+	const std::vector<std::string> UIModes = { "Full", "Kiosk" };
+	void launchGame(Window* window, FileData* game);
+}
 
-const std::vector<std::string> UIModes = { "Full", "Kiosk" };
 
 // Used to smoothly transition the camera between multiple views (e.g. from system to system, from gamelist to gamelist).
 class ViewController : public GuiComponent
