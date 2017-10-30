@@ -190,12 +190,12 @@ void FileData::launchGame(Window* window, FileData* game)
 
 	command = strreplace(command, "%ROM%", rom);
 	command = strreplace(command, "%CONTROLLERSCONFIG%", controlersConfig);
-	command = strreplace(command, "%SYSTEM%", game->metadata.get("system"));
+	command = strreplace(command, "%SYSTEM%", file->metadata.get("system"));
 	command = strreplace(command, "%BASENAME%", basename);
 	command = strreplace(command, "%ROM_RAW%", rom_raw);
-	command = strreplace(command, "%EMULATOR%", game->metadata.get("emulator"));
-	command = strreplace(command, "%CORE%", game->metadata.get("core"));
-	command = strreplace(command, "%RATIO%", game->metadata.get("ratio"));
+	command = strreplace(command, "%EMULATOR%", file->metadata.get("emulator"));
+	command = strreplace(command, "%CORE%", file->metadata.get("core"));
+	command = strreplace(command, "%RATIO%", file->metadata.get("ratio"));
 	LOG(LogInfo) << "	" << command;
 	std::cout << "==============================================\n";
 	int exitCode = runSystemCommand(command);
