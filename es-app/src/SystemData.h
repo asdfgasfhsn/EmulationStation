@@ -18,7 +18,7 @@ struct SystemEnvironmentData
 	std::vector<PlatformIds::PlatformId> mPlatformIds;
 };
 
-class SystemData
+class SystemData;
 {
 public:
 	SystemData(const std::string& name, const std::string& fullName, SystemEnvironmentData* envData, const std::string& themeFolder, bool CollectionSystem = false);
