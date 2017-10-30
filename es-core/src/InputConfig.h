@@ -9,6 +9,7 @@
 #include "pugixml/src/pugixml.hpp"
 
 #define DEVICE_KEYBOARD -1
+#define MAX_PLAYERS 5
 
 enum InputType
 {
@@ -115,7 +116,7 @@ private:
 	// Returns true if there is an Input mapped to this name, false otherwise.
 	// Writes Input mapped to this name to result if true.
 	bool getInputByName(const std::string& name, Input* result);
-	
+
 	std::map<std::string, Input> mNameMap;
 	const int mDeviceId;
 	const int mDeviceIndex;
