@@ -18,7 +18,7 @@ struct SystemEnvironmentData
 	std::vector<PlatformIds::PlatformId> mPlatformIds;
 };
 
-class SystemData;
+class SystemData
 {
 public:
 	SystemData(const std::string& name, const std::string& fullName, SystemEnvironmentData* envData, const std::string& themeFolder, bool CollectionSystem = false);
@@ -42,6 +42,8 @@ public:
 
 	unsigned int getGameCount() const;
 	unsigned int getDisplayedGameCount() const;
+
+	void launchGame(Window* window, FileData* game);
 
 	static void deleteSystems();
 	static bool loadConfig(); //Load the system config file at getConfigPath(). Returns true if no errors were encountered. An example will be written if the file doesn't exist.
