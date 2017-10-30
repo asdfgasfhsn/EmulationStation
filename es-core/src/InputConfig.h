@@ -83,7 +83,7 @@ public:
 class InputConfig
 {
 public:
-	InputConfig(int deviceId, const std::string& deviceName, const std::string& deviceGUID);
+	InputConfig(int deviceId, int deviceIndex, const std::string& deviceName, const std::string& deviceGUID, int deviceNbAxes);
 
 	void clear();
 	void mapInput(const std::string& name, Input input);
@@ -112,6 +112,10 @@ public:
 	bool isConfigured();
 
 private:
+	// Returns true if there is an Input mapped to this name, false otherwise.
+	// Writes Input mapped to this name to result if true.
+	bool getInputByName(const std::string& name, Input* result);
+	
 	std::map<std::string, Input> mNameMap;
 	const int mDeviceId;
 	const int mDeviceIndex;
