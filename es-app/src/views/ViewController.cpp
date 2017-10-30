@@ -240,7 +240,7 @@ void ViewController::launch(FileData* game, Eigen::Vector3f center)
 		};
 		setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this, game, fadeFunc]
 		{
-			game->getSystem()->launchGame(mWindow, game);
+			game->getSystem()->launchGame(mWindow, FileData* game);
 			setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
 		});
@@ -248,7 +248,7 @@ void ViewController::launch(FileData* game, Eigen::Vector3f center)
 		// move camera to zoom in on center + fade out, launch game, come back in
 		setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 1500), 0, [this, origCamera, center, game]
 		{
-			game->getSystem()->launchGame(mWindow, game);
+			game->getSystem()->launchGame(mWindow, FileData* game);
 			mCamera = origCamera;
 			setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 600), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
@@ -256,7 +256,7 @@ void ViewController::launch(FileData* game, Eigen::Vector3f center)
 	} else { // instant
 		setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 10), 0, [this, origCamera, center, game]
 		{
-			game->getSystem()->launchGame(mWindow, game);
+			game->getSystem()->launchGame(mWindow, FileData* game);
 			mCamera = origCamera;
 			setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 10), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
