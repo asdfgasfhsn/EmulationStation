@@ -90,8 +90,11 @@ public:
 	void unmapInput(const std::string& name); // unmap all Inputs mapped to this name
 
 	inline int getDeviceId() const { return mDeviceId; };
+
+	inline int getDeviceIndex() const { return mDeviceIndex; };
 	inline const std::string& getDeviceName() { return mDeviceName; }
 	inline const std::string& getDeviceGUIDString() { return mDeviceGUID; }
+	inline int getDeviceNbAxes() const { return mDeviceNbAxes; };
 
 	//Returns true if Input is mapped to this name, false otherwise.
 	bool isMappedTo(const std::string& name, Input input);
@@ -111,8 +114,10 @@ public:
 private:
 	std::map<std::string, Input> mNameMap;
 	const int mDeviceId;
+	const int mDeviceIndex;
 	const std::string mDeviceName;
 	const std::string mDeviceGUID;
+	const int mDeviceNbAxes; // number of axes of the device
 };
 
 #endif
