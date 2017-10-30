@@ -32,6 +32,9 @@ private:
 	void addJoystickByDeviceIndex(int id);
 	void removeJoystickByJoystickID(SDL_JoystickID id);
 	bool loadInputConfig(InputConfig* config); // returns true if successfully loaded, false if not (or didn't exist)
+				// void clearJoystick();
+				// void addAllJoysticks();
+
 
 public:
 	virtual ~InputManager();
@@ -39,8 +42,8 @@ public:
 	static InputManager* getInstance();
 
 	void writeDeviceConfig(InputConfig* config);
-	void doOnFinish();
 	static std::string getConfigPath();
+
 	static std::string getTemporaryConfigPath();
 
 	void init();

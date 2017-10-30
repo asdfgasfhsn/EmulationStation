@@ -78,6 +78,11 @@ void Settings::setDefaults()
 		mIntMap["MaxVRAM"] = 100;
 	#endif
 
+	mStringMap["INPUT P1"] = "DEFAULT";
+	mStringMap["INPUT P2"] = "DEFAULT";
+	mStringMap["INPUT P3"] = "DEFAULT";
+	mStringMap["INPUT P4"] = "DEFAULT";
+
 	mStringMap["TransitionStyle"] = "fade";
 	mStringMap["ThemeSet"] = "";
 	mStringMap["ScreenSaverBehavior"] = "dim";
