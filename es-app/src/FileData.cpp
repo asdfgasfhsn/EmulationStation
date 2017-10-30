@@ -171,7 +171,7 @@ void FileData::sort(const SortType& type)
 	sort(*type.comparisonFunction, type.ascending);
 }
 
-void FileData::launchGame(Window* window)
+void FileData::launchGame(Window* window, FileData* game)
 {
 	LOG(LogInfo) << "Attempting to launch game...";
 
