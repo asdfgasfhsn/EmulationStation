@@ -3,9 +3,11 @@
 #include "Settings.h"
 #include "Window.h"
 #include "Log.h"
-#include "pugixml/src/pugixml.hpp"
+#include "pugixml/pugixml.hpp"
 #include <boost/filesystem.hpp>
+#include <utility>
 #include "platform.h"
+#include "Settings.h"
 
 #define KEYBOARD_GUID_STRING "-1"
 
@@ -52,11 +54,7 @@ void InputManager::init()
 	SDL_JoystickEventState(SDL_ENABLE);
 
 	// first, open all currently present joysticks
-	int numJoysticks = SDL_NumJoysticks();
-	for(int i = 0; i < numJoysticks; i++)
-	{
-		addJoystickByDeviceIndex(i);
-	}
+        this->addAllJoysticks();
 
 	mKeyboardInputConfig = new InputConfig(DEVICE_KEYBOARD, -1, "Keyboard", KEYBOARD_GUID_STRING, 0);
 	loadInputConfig(mKeyboardInputConfig);
@@ -78,7 +76,7 @@ void InputManager::addJoystickByDeviceIndex(int id)
 	SDL_JoystickGetGUIDString(SDL_JoystickGetGUID(joy), guid, 65);
 
 	// create the InputConfig
-	mInputConfigs[joyId] = new InputConfig(joyId, id, SDL_JoystickName(joy), guid, SDL_JoystickNumAxes(joy));;
+	mInputConfigs[joyId] = new InputConfig(joyId, id, SDL_JoystickName(joy), guid, SDL_JoystickNumAxes(joy));
 	if(!loadInputConfig(mInputConfigs[joyId]))
 	{
 		LOG(LogInfo) << "Added unconfigured joystick " << SDL_JoystickName(joy) << " (GUID: " << guid << ", instance ID: " << joyId << ", device index: " << id << ").";
@@ -115,14 +113,22 @@ void InputManager::removeJoystickByJoystickID(SDL_JoystickID joyId)
 	}else{
 		LOG(LogError) << "Could not find joystick to close (instance ID: " << joyId << ")";
 	}
+        LOG(LogError) << "I removed a joystick";
+
 }
 
-void InputManager::deinit()
+void InputManager::addAllJoysticks()
 {
-	if(!initialized())
-		return;
-
-	for(auto iter = mJoysticks.begin(); iter != mJoysticks.end(); iter++)
+    clearJoystick();
+    int numJoysticks = SDL_NumJoysticks();
+    for(int i = 0; i < numJoysticks; i++)
+    {
+            addJoystickByDeviceIndex(i);
+    }
+}
+void InputManager::clearJoystick()
+{
+    for(auto iter = mJoysticks.begin(); iter != mJoysticks.end(); iter++)
 	{
 		SDL_JoystickClose(iter->second);
 	}
@@ -139,6 +145,15 @@ void InputManager::deinit()
 		delete[] iter->second;
 	}
 	mPrevAxisValues.clear();
+
+}
+void InputManager::deinit()
+{
+	if(!initialized())
+		return;
+
+	this->clearJoystick();
+
 
 	if(mKeyboardInputConfig != NULL)
 	{
@@ -158,7 +173,13 @@ int InputManager::getButtonCountByDevice(SDL_JoystickID id)
 	else
 		return SDL_JoystickNumButtons(mJoysticks[id]);
 }
-
+int InputManager::getAxisCountByDevice(SDL_JoystickID id)
+{
+	if(id == DEVICE_KEYBOARD)
+		return 0; //it's zero, okay.
+	else
+		return SDL_JoystickNumAxes(mJoysticks[id]);
+}
 InputConfig* InputManager::getInputConfigByDevice(int device)
 {
 	if(device == DEVICE_KEYBOARD)
@@ -230,12 +251,24 @@ bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 		break;
 
 	case SDL_JOYDEVICEADDED:
-		addJoystickByDeviceIndex(ev.jdevice.which); // ev.jdevice.which is a device index
-		return true;
+#if defined(__APPLE__)
+        addJoystickByDeviceIndex(ev.jdevice.which); // ev.jdevice.which is a device index
+#else
+        if(! getInputConfigByDevice(ev.jdevice.which)){
+            LOG(LogInfo) << "Reinitialize because of SDL_JOYDEVADDED unknown";
+            this->init();
+        }
+#endif
+        return true;
 
 	case SDL_JOYDEVICEREMOVED:
-		removeJoystickByJoystickID(ev.jdevice.which); // ev.jdevice.which is an SDL_JoystickID (instance ID)
-		return false;
+#if defined(__APPLE__)
+        removeJoystickByJoystickID(ev.jdevice.which); // ev.jdevice.which is an SDL_JoystickID (instance ID)
+#else
+        LOG(LogInfo) << "Reinitialize because of SDL_JOYDEVICEREMOVED";
+        this->init();
+#endif
+        return false;
 	}
 
 	return false;
@@ -260,11 +293,40 @@ bool InputManager::loadInputConfig(InputConfig* config)
 	if(!root)
 		return false;
 
-	pugi::xml_node configNode = root.find_child_by_attribute("inputConfig", "deviceGUID", config->getDeviceGUIDString().c_str());
-	if(!configNode)
-		configNode = root.find_child_by_attribute("inputConfig", "deviceName", config->getDeviceName().c_str());
+	// looking for a device having the same guid and name, or if not, one with the same guid or in last chance, one with the same name
+	pugi::xml_node configNode(NULL);
+
+	bool found_guid = false;
+	bool found_exact = false;
+	for (pugi::xml_node item = root.child("inputConfig"); item; item = item.next_sibling("inputConfig")) {
+	  // check the guid
+	  if(strcmp(config->getDeviceGUIDString().c_str(), item.attribute("deviceGUID").value()) == 0) {
+	    // found a correct guid
+	    found_guid = true; // no more need to check the name only
+	    configNode = item;
+
+	    if(strcmp(config->getDeviceName().c_str(), item.attribute("deviceName").value()) == 0) {
+	      // found the exact device
+	      found_exact = true;
+	      configNode = item;
+	      break;
+	    }
+	  }
+
+	  // check for a name if no guid is found
+	  if(found_guid == false) {
+	    if(strcmp(config->getDeviceName().c_str(), item.attribute("deviceName").value()) == 0) {
+	      configNode = item;
+	    }
+	  }
+	}
+
 	if(!configNode)
 		return false;
+
+	if(found_exact == false) {
+	  LOG(LogInfo) << "Approximative device found using guid=" << configNode.attribute("deviceGUID").value() << " name=" << configNode.attribute("deviceName").value() << ")";
+	}
 
 	config->loadFromXML(configNode);
 	return true;
@@ -341,13 +403,6 @@ std::string InputManager::getConfigPath()
 {
 	std::string path = getHomePath();
 	path += "/.emulationstation/es_input.cfg";
-	return path;
-}
-
-std::string InputManager::getTemporaryConfigPath()
-{
-	std::string path = getHomePath();
-	path += "/.emulationstation/es_temporaryinput.cfg";
 	return path;
 }
 

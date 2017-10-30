@@ -31,9 +31,9 @@ private:
 
 	void addJoystickByDeviceIndex(int id);
 	void removeJoystickByJoystickID(SDL_JoystickID id);
-	bool loadInputConfig(InputConfig* config); // returns true if successfully loaded, false if not (or didn't exist)
-				// void clearJoystick();
-				// void addAllJoysticks();
+	bool loadInputConfig(InputConfig* config); // returns true if successfully loaded, false if not (or didn't exist)                
+        void clearJoystick();
+        void addAllJoysticks();
 
 
 public:
@@ -44,13 +44,13 @@ public:
 	void writeDeviceConfig(InputConfig* config);
 	static std::string getConfigPath();
 
-	static std::string getTemporaryConfigPath();
-
 	void init();
 	void deinit();
 
 	int getNumJoysticks();
 	int getButtonCountByDevice(int deviceId);
+	int getAxisCountByDevice(int deviceId);
+
 	int getNumConfiguredDevices();
 
 	std::string getDeviceGUIDString(int deviceId);
@@ -59,6 +59,7 @@ public:
 
 	bool parseEvent(const SDL_Event& ev, Window* window);
 	std::string configureEmulators();
+
 };
 
 #endif
