@@ -4,6 +4,7 @@
 #include "SystemData.h"
 #include "Log.h"
 #include "AudioManager.h"
+#include "InputManager.h"
 #include "VolumeControl.h"
 #include "Util.h"
 
