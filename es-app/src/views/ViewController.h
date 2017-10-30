@@ -4,7 +4,7 @@
 #include "views/SystemView.h"
 
 class SystemData;
-
+void launchGame(Window* window, FileData* game);
 const std::vector<std::string> UIModes = { "Full", "Kiosk" };
 
 // Used to smoothly transition the camera between multiple views (e.g. from system to system, from gamelist to gamelist).
@@ -91,11 +91,11 @@ private:
 
 	void playViewTransition();
 	int getSystemId(SystemData* system);
-	
+
 	std::shared_ptr<GuiComponent> mCurrentView;
 	std::map< SystemData*, std::shared_ptr<IGameListView> > mGameListViews;
 	std::shared_ptr<SystemView> mSystemListView;
-	
+
 	Eigen::Affine3f mCamera;
 	float mFadeOpacity;
 	bool mLockInput;
