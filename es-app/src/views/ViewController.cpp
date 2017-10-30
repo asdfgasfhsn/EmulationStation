@@ -1,6 +1,7 @@
 #include "views/ViewController.h"
 #include "Log.h"
 #include "SystemData.h"
+#include "FileData.h"
 #include "Settings.h"
 #include "PowerSaver.h"
 
