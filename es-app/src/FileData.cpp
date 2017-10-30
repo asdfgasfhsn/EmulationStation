@@ -177,6 +177,9 @@ void FileData::launchGame(Window* window)
 
 	AudioManager::getInstance()->deinit();
 	VolumeControl::getInstance()->deinit();
+
+	std::string controlersConfig = InputManager::getInstance()->configureEmulators();
+	LOG(LogInfo) << "Controllers config : " << controlersConfig;
 	window->deinit();
 
 	std::string command = mEnvData->mLaunchCommand;
@@ -186,11 +189,17 @@ void FileData::launchGame(Window* window)
 	const std::string rom_raw = fs::path(getPath()).make_preferred().string();
 
 	command = strreplace(command, "%ROM%", rom);
+	command = strreplace(command, "%CONTROLLERSCONFIG%", controlersConfig);
+	command = strreplace(command, "%SYSTEM%", game->metadata.get("system"));
 	command = strreplace(command, "%BASENAME%", basename);
 	command = strreplace(command, "%ROM_RAW%", rom_raw);
-
+	command = strreplace(command, "%EMULATOR%", game->metadata.get("emulator"));
+	command = strreplace(command, "%CORE%", game->metadata.get("core"));
+	command = strreplace(command, "%RATIO%", game->metadata.get("ratio"));
 	LOG(LogInfo) << "	" << command;
+	std::cout << "==============================================\n";
 	int exitCode = runSystemCommand(command);
+	std::cout << "==============================================\n";
 
 	if(exitCode != 0)
 	{
