@@ -41,7 +41,7 @@ public:
 	inline FileData* getParent() const { return mParent; }
 	inline const std::unordered_map<std::string, FileData*>& getChildrenByFilename() const { return mChildrenByFilename; }
 	inline const std::vector<FileData*>& getChildren() const { return mChildren; }
-	inline FileData* getSystem() const { return mSystem; }
+	inline SystemData* getSystem() const { return mSystem; }
 	inline SystemEnvironmentData* getSystemEnvData() const { return mEnvData; }
 	virtual const std::string& getThumbnailPath() const;
 	virtual const std::string& getVideoPath() const;
