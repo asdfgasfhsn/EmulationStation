@@ -194,7 +194,7 @@ void FileData::launchGame(Window* window)
 	command = strreplace(command, "%CONTROLLERSCONFIG%", controlersConfig);
 	command = strreplace(command, "%BASENAME%", basename);
 	command = strreplace(command, "%ROM_RAW%", rom_raw);
-	command = strreplace(command, "%SYSTEM%", system);
+	command = strreplace(command, "%SYSTEM%", game->metadata.get("system"));
 	command = strreplace(command, "%EMULATOR%", emulator);
 	command = strreplace(command, "%CORE%", core);
 	command = strreplace(command, "%RATIO%", ratio);
