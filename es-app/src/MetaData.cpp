@@ -8,7 +8,7 @@ namespace fs = boost::filesystem;
 MetaDataDecl gameDecls[] = {
 	// key,         type,                   default,            statistic,  name in GuiMetaDataEd,  prompt in GuiMetaDataEd
 	{"name",        MD_STRING,              "",                 false,      "name",                 "enter game name"},
-	{"system",      MD_STRING,   					  "default",          false,      "system",               "system"},
+	{"system",      MD_STRING,              "default",          false,      "system",               "system"},
 	{"emulator",    MD_STRING,              "default",          false,      "emulator",             "emulator"},
 	{"core",        MD_STRING,              "default",          false,      "core",                 "core"},
 	{"ratio",       MD_STRING,              "auto",             false,      "ratio",                "ratio"},
