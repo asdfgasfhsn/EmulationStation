@@ -3,6 +3,7 @@
 #include "views/ViewController.h"
 #include "SystemData.h"
 #include "Log.h"
+#include "InputManager.h"
 #include "AudioManager.h"
 #include "VolumeControl.h"
 #include "Util.h"
@@ -177,6 +178,10 @@ void FileData::launchGame(Window* window)
 
 	AudioManager::getInstance()->deinit();
 	VolumeControl::getInstance()->deinit();
+
+	std::string controlersConfig = InputManager::getInstance()->configureEmulators();
+	LOG(LogInfo) << "Controllers config : " << controlersConfig;
+
 	window->deinit();
 
 	std::string command = mEnvData->mLaunchCommand;
@@ -186,6 +191,7 @@ void FileData::launchGame(Window* window)
 	const std::string rom_raw = fs::path(getPath()).make_preferred().string();
 
 	command = strreplace(command, "%ROM%", rom);
+	command = strreplace(command, "%CONTROLLERSCONFIG%", controlersConfig);
 	command = strreplace(command, "%BASENAME%", basename);
 	command = strreplace(command, "%ROM_RAW%", rom_raw);
 
