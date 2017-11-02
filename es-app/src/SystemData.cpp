@@ -260,7 +260,7 @@ bool SystemData::loadConfig()
 
 		// emulators and cores
 		std::map<std::string, std::vector<std::string>*> * systemEmulators = new std::map<std::string, std::vector<std::string>*>();
-		pugi::xml_node emulatorsNode = system->child("emulators");
+		pugi::xml_node emulatorsNode = system.child("emulators");
 		for(pugi::xml_node emuNode = emulatorsNode.child("emulator"); emuNode; emuNode = emuNode.next_sibling("emulator")) {
 			std::string emulatorName = emuNode.attribute("name").as_string();
 			(*systemEmulators)[emulatorName] = new std::vector<std::string>();
