@@ -189,13 +189,12 @@ void FileData::launchGame(Window* window)
 	const std::string rom = escapePath(getPath());
 	const std::string basename = getPath().stem().string();
 	const std::string rom_raw = fs::path(getPath()).make_preferred().string();
-	const std::string system_name = mSourceFileData->getSystem()->getName();
 
 	command = strreplace(command, "%ROM%", rom);
 	command = strreplace(command, "%CONTROLLERSCONFIG%", controlersConfig);
 	command = strreplace(command, "%BASENAME%", basename);
 	command = strreplace(command, "%ROM_RAW%", rom_raw);
-	command = strreplace(command, "%SYSTEM%", system_name);
+	command = strreplace(command, "%SYSTEM%", metadata.get("system");
 	command = strreplace(command, "%EMULATOR%", metadata.get("emulator"));
 	command = strreplace(command, "%CORE%", metadata.get("core"));
 	command = strreplace(command, "%RATIO%", metadata.get("ratio"));
