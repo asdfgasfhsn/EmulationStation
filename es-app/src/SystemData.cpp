@@ -259,17 +259,17 @@ bool SystemData::loadConfig()
 		}
 
 		// emulators and cores
-		// std::map<std::string, std::vector<std::string>*> * systemEmulators = new std::map<std::string, std::vector<std::string>*>();
-		// pugi::xml_node emulatorsNode = system->child("emulators");
-		// for(pugi::xml_node emuNode = emulatorsNode.child("emulator"); emuNode; emuNode = emuNode.next_sibling("emulator")) {
-		// 	std::string emulatorName = emuNode.attribute("name").as_string();
-		// 	(*systemEmulators)[emulatorName] = new std::vector<std::string>();
-		// 	pugi::xml_node coresNode = emuNode.child("cores");
-		// 	for (pugi::xml_node coreNode = coresNode.child("core"); coreNode; coreNode = coreNode.next_sibling("core")) {
-		// 		std::string corename = coreNode.text().as_string();
-		// 		(*systemEmulators)[emulatorName]->push_back(corename);
-		// 	}
-		// }
+		std::map<std::string, std::vector<std::string>*> * systemEmulators = new std::map<std::string, std::vector<std::string>*>();
+		pugi::xml_node emulatorsNode = system->child("emulators");
+		for(pugi::xml_node emuNode = emulatorsNode.child("emulator"); emuNode; emuNode = emuNode.next_sibling("emulator")) {
+			std::string emulatorName = emuNode.attribute("name").as_string();
+			(*systemEmulators)[emulatorName] = new std::vector<std::string>();
+			pugi::xml_node coresNode = emuNode.child("cores");
+			for (pugi::xml_node coreNode = coresNode.child("core"); coreNode; coreNode = coreNode.next_sibling("core")) {
+				std::string corename = coreNode.text().as_string();
+				(*systemEmulators)[emulatorName]->push_back(corename);
+			}
+		}
 
 
 		//create the system runtime environment data
