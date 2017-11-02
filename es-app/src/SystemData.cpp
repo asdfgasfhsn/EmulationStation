@@ -201,7 +201,7 @@ bool SystemData::loadConfig()
 
 	for(pugi::xml_node system = systemList.child("system"); system; system = system.next_sibling("system"))
 	{
-		std::string name, fullname, path, cmd, themeFolder;
+		std::string name, fullname, path, cmd, emulators, core, themeFolder;
 		PlatformIds::PlatformId platformId = PlatformIds::PLATFORM_UNKNOWN;
 
 		name = system.child("name").text().get();
